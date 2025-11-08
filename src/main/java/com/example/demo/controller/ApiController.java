@@ -25,6 +25,17 @@ public class ApiController {
         return "¡Hola desde Spring Boot conectado a Supabase! 🔥";
     }
 
+    // Endpoint de test para verificar conexión
+    @GetMapping("/test")
+    public ResponseEntity<?> test() {
+        return ResponseEntity.ok()
+            .body(java.util.Map.of(
+                "status", "ok",
+                "message", "Backend conectado correctamente",
+                "timestamp", java.time.LocalDateTime.now().toString()
+            ));
+    }
+
     // Obtener todos los usuarios
     @GetMapping("/users")
     public List<User> getAllUsers() {

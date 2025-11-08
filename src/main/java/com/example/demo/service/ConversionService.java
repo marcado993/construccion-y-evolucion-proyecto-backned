@@ -32,6 +32,7 @@ public class ConversionService {
         boolean exito = true;
         String mensaje = "Conversión exitosa";
         long startTime = System.currentTimeMillis();
+        Conversion savedConversion = null;
         
         try {
             if ("texto-a-braille".equals(request.getTipo())) {
@@ -65,7 +66,7 @@ public class ConversionService {
                     conversion.setIpOrigen(request.getIpOrigen());
                 }
                 
-                conversionRepository.save(conversion);
+                savedConversion = conversionRepository.save(conversion);
             }
             
         } catch (Exception e) {
@@ -81,6 +82,13 @@ public class ConversionService {
             exito
         );
         response.setMensaje(mensaje);
+        
+        // Si se guardó, agregar el ID y fecha
+        if (savedConversion != null) {
+            response.setId(savedConversion.getId());
+            response.setFecha(savedConversion.getFecha().toString());
+            response.setTiempoConversionMs(savedConversion.getTiempoConversionMs());
+        }
         
         return response;
     }
