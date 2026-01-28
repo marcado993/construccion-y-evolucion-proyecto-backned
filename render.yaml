@@ -1,0 +1,29 @@
+services:
+  # Web Service - Spring Boot Backend
+  - type: web
+    name: construccion-backend
+    env: docker
+    region: oregon
+    plan: free  # o 'starter' para $7/mes con más recursos
+    branch: main
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DATABASE_URL
+        value: jdbc:postgresql://aws-1-us-east-1.pooler.supabase.com:6543/postgres?prepareThreshold=0
+      - key: DATABASE_USERNAME
+        value: postgres.bnfqxgzencmgqfiryrww
+      - key: DATABASE_PASSWORD
+        sync: false  # Marca como secreta - deberás configurarla manualmente en Render
+      - key: CORS_ALLOWED_ORIGINS
+        value: http://localhost:3000,https://*.onrender.com
+      - key: JAVA_TOOL_OPTIONS
+        value: -Xmx512m -Xms256m  # Optimización de memoria para plan free
+    healthCheckPath: /api/health  # Ajusta según tu endpoint de health check
+    autoDeploy: true  # Auto-deploy en push a main
+
+# Opcional: Si necesitas una base de datos PostgreSQL en Render
+# databases:
+#   - name: construccion-db
+#     databaseName: construccion
+#     user: construccion_user
+#     plan: free  # o 'starter' para producción
